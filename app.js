@@ -21,11 +21,14 @@ const todoModel = {
 //! Logging
 // console.log(myTodos);
 
+let todoData = myTodos;
+const resetCopy = { ...myTodos };
+
 //? Section
 const todosSection = document.querySelector("#todoList");
-const addToDOM = () => {
+const addToDOM = (array) => {
   todosSection.innerText = "";
-  myTodos.forEach((el, i, arr) => {
+  array.forEach((el, i, arr) => {
     const wrapper = document.createElement("div");
     const title = document.createElement("h3");
     const status = document.createElement("p");
@@ -41,7 +44,7 @@ const addToDOM = () => {
     todosSection.appendChild(wrapper);
   });
 };
-addToDOM();
+addToDOM(todoData);
 
 //? Button Binding
 const createTodoButton = document.querySelector("#createTodoBtn");
@@ -49,12 +52,14 @@ const createCategoryButton = document.querySelector("#createNewCategory");
 const editTodoButton = document.querySelector("#editTodo");
 const deleteTodoButton = document.querySelector("#delTodoButton");
 const deleteTodoCategories = document.querySelector("#deleteCategoriesButton");
+const resetButton = document.querySelector("#RESET");
 
 createTodoButton.addEventListener("click", async () => {
   await createTodo(myTodos, todoModel, {
     title: "Hello JS World",
   });
   console.log(myTodos);
+  addToDOM(todoData);
 });
 
 createCategoryButton.addEventListener("click", async () => {
@@ -70,7 +75,7 @@ editTodoButton.addEventListener("click", async () => {
     categoryInput: ["general", "school"],
   });
   // console.log(myTodos);
-  addToDOM();
+  addToDOM(todoData);
 });
 
 deleteTodoButton.addEventListener("click", (event) => {
@@ -81,4 +86,10 @@ deleteTodoButton.addEventListener("click", (event) => {
 deleteTodoCategories.addEventListener("click", () => {
   const data = deleteTodoCategory(myTodos[1]);
   console.log(myTodos);
+});
+
+//! RESET BUTTON
+resetButton.addEventListener("click", () => {
+  todoData.splice(0);
+  addToDOM(todoData);
 });
