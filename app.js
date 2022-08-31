@@ -24,10 +24,8 @@ const todoModel = {
 //? Section
 const todosSection = document.querySelector("#todoList");
 const addToDOM = () => {
-  todosSection.innerHTML = "";
-
+  todosSection.innerText = "";
   myTodos.forEach((el, i, arr) => {
-    // Create Elements
     const wrapper = document.createElement("div");
     const title = document.createElement("h3");
     const status = document.createElement("p");
