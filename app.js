@@ -19,10 +19,31 @@ const todoModel = {
 };
 
 //! Logging
-console.log(myTodos);
+// console.log(myTodos);
 
 //? Section
 const todosSection = document.querySelector("#todoList");
+const addToDOM = () => {
+  todosSection.innerHTML = "";
+
+  myTodos.forEach((el, i, arr) => {
+    // Create Elements
+    const wrapper = document.createElement("div");
+    const title = document.createElement("h3");
+    const status = document.createElement("p");
+    const dueDate = document.createElement("p");
+
+    title.textContent = el.title;
+    status.textContent = el.status;
+    dueDate.textContent = el.dueDate;
+
+    wrapper.appendChild(title);
+    wrapper.appendChild(status);
+    wrapper.appendChild(dueDate);
+    todosSection.appendChild(wrapper);
+  });
+};
+addToDOM();
 
 //? Button Binding
 const createTodoButton = document.querySelector("#createTodoBtn");
@@ -51,6 +72,7 @@ editTodoButton.addEventListener("click", async () => {
     categoryInput: ["general", "school"],
   });
   // console.log(myTodos);
+  addToDOM();
 });
 
 deleteTodoButton.addEventListener("click", (event) => {
