@@ -81,6 +81,7 @@ editTodoButton.addEventListener("click", async () => {
 deleteTodoButton.addEventListener("click", (event) => {
   deleteTodo(myTodos, myTodos[1]);
   console.log(myTodos);
+  addToDOM(todoData)
 });
 
 deleteTodoCategories.addEventListener("click", () => {
