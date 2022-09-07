@@ -28,7 +28,7 @@ const resetCopy = { ...myTodos };
 const todosSection = document.querySelector("#todoList");
 const addToDOM = (array) => {
   todosSection.innerText = "";
-  array.forEach((el, i, arr) => {
+  array.forEach((el, i) => {
     const wrapper = document.createElement("div");
     wrapper.className = "card";
 
@@ -38,20 +38,33 @@ const addToDOM = (array) => {
     const cardActions = document.createElement("div");
     cardActions.className = "cardActions";
 
+    const todoStatus = document.createElement("div");
+    todoStatus.className = el.status
+      ? "todoStatus__complete"
+      : "todoStatus__default";
+
     // Card Info
     const title = document.createElement("h3");
     title.textContent = el.title;
+
     const dueDate = document.createElement("p");
     dueDate.textContent = `Due: ${el.dueDate}`;
-    cardInfo.appendChild(title).appendChild(dueDate);
+
+    cardInfo.appendChild(title);
+    cardInfo.appendChild(dueDate);
 
     // cardActions
     const editTodo = document.createElement("button");
-    const completeTodo = document.createElement("button");
+
     const delTodo = document.createElement("button");
+    delTodo.className = "button";
+
+    // cardActions.appendChild(delTodo);
 
     // Card Append
-    wrapper.appendChild(cardInfo).appendChild(cardActions);
+    wrapper.appendChild(cardInfo);
+    // wrapper.appendChild(cardActions);
+    wrapper.appendChild(todoStatus);
 
     todosSection.appendChild(wrapper);
   });

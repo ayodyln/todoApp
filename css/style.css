@@ -24,13 +24,14 @@ header {
 .main__wrapper {
   background-color: grey;
   height: 100%;
+  padding: 1em;
 }
 
 main {
   max-width: 50em;
+  height: 100%;
   margin: auto;
-  border: solid white 1px;
-  margin-top: 1em;
+  /* border: solid white 1px; */
 }
 
 #todoList {
@@ -38,8 +39,26 @@ main {
 }
 
 #todoList > div {
-  border: red solid 1px;
   margin: 1em 0;
+  cursor: pointer;
+  display: flex;
+  overflow: hidden;
+}
+
+.cardInfo {
+  width: 100%;
+}
+
+.cardActions {
+}
+
+.todoStatus__default {
+  width: 1em;
+  background-color: red;
+}
+.todoStatus__complete {
+  width: 1em;
+  background-color: blue;
 }
 
 footer {

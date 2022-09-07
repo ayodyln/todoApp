@@ -3,7 +3,7 @@ const myTodos = [
   {
     id: 0,
     title: "First Todo",
-    status: false,
+    status: true,
     category: ["Example"],
     startDate: new Date(),
     dueDate: new Date(),
