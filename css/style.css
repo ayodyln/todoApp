@@ -1,0 +1,49 @@
+/* Color theme from https://coolors.co/40f99b-61707d-b8e1ff-e85d75-ffcf56 */
+:root {
+  --medium-spring-green: #40f99bff;
+  --dark-electric-blue: #61707dff;
+  --uranian-blue: #b8e1ffff;
+  --brink-pink: #e85d75ff;
+  --maize-crayola: #ffcf56ff;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  /* Box shadow styling from Bulma.io */
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+    0 0 0 1px rgba(10, 10, 10, 0.02);
+  padding: 1em;
+  background-color: var(--maize-crayola);
+}
+
+.main__wrapper {
+  background-color: grey;
+  height: 100%;
+}
+
+main {
+  max-width: 50em;
+  margin: auto;
+  border: solid white 1px;
+  margin-top: 1em;
+}
+
+#todoList {
+  /* margin: 2em; */
+}
+
+#todoList > div {
+  border: red solid 1px;
+  margin: 1em 0;
+}
+
+footer {
+  background-color: var(--maize-crayola);
+  padding: 1em;
+  text-align: center;
+}

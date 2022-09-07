@@ -4,26 +4,51 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <!--! Styling with help from Bulma -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <script src="app.js" type="module" defer></script>
     <title>JS Todo App Assignment</title>
   </head>
   <body>
     <header>
-      <h1>JS Todo App</h1>
+      <h1 class="title">JS Todo App</h1>
     </header>
 
-    <main>
-      <div>
-        <button id="createTodoBtn">Create Todo</button>
-        <button id="createNewCategory">Create New Category</button>
-        <button id="editTodo">Edit Todo</button>
-        <button id="delTodoButton">Delete Todo</button>
-        <button id="deleteCategoriesButton">Delete Categories</button>
-        <button id="RESET">Reset</button>
-      </div>
+    <div class="main__wrapper">
+      <main>
+        <section class="createTodo"></section>
 
-      <section id="todoList"></section>
-    </main>
+        <section id="todoList">
+          <!-- <div class="card">
+            <div class="cardInfo">
+              <h3>First Todo</h3>
+              <p>Due Date</p>
+            </div>
+            <div class="cardActions">
+              <button class="button">Edit</button>
+              <button class="button">Complete</button>
+              <button class="button">X</button>
+            </div>
+          </div> -->
+        </section>
 
-    <script src="app.js" type="module"></script>
+        <section id="todoActions">
+          <button id="createTodoBtn">Create Todo</button>
+          <button id="createNewCategory">Create New Category</button>
+          <button id="editTodo">Edit Todo</button>
+          <button id="delTodoButton">Delete Todo</button>
+          <button id="deleteCategoriesButton">Delete Categories</button>
+          <button id="RESET">Reset</button>
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      <p>Created By Dylan Smith for DGM 3760, Utah Valley University.</p>
+    </footer>
   </body>
 </html>

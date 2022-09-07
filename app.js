@@ -30,17 +30,29 @@ const addToDOM = (array) => {
   todosSection.innerText = "";
   array.forEach((el, i, arr) => {
     const wrapper = document.createElement("div");
+    wrapper.className = "card";
+
+    const cardInfo = document.createElement("div");
+    cardInfo.className = "cardInfo";
+
+    const cardActions = document.createElement("div");
+    cardActions.className = "cardActions";
+
+    // Card Info
     const title = document.createElement("h3");
-    const status = document.createElement("p");
-    const dueDate = document.createElement("p");
-
     title.textContent = el.title;
-    status.textContent = el.status;
-    dueDate.textContent = el.dueDate;
+    const dueDate = document.createElement("p");
+    dueDate.textContent = `Due: ${el.dueDate}`;
+    cardInfo.appendChild(title).appendChild(dueDate);
 
-    wrapper.appendChild(title);
-    wrapper.appendChild(status);
-    wrapper.appendChild(dueDate);
+    // cardActions
+    const editTodo = document.createElement("button");
+    const completeTodo = document.createElement("button");
+    const delTodo = document.createElement("button");
+
+    // Card Append
+    wrapper.appendChild(cardInfo).appendChild(cardActions);
+
     todosSection.appendChild(wrapper);
   });
 };
@@ -81,7 +93,7 @@ editTodoButton.addEventListener("click", async () => {
 deleteTodoButton.addEventListener("click", (event) => {
   deleteTodo(myTodos, myTodos[1]);
   console.log(myTodos);
-  addToDOM(todoData)
+  addToDOM(todoData);
 });
 
 deleteTodoCategories.addEventListener("click", () => {
