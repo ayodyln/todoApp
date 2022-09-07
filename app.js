@@ -1,4 +1,5 @@
 import myTodos from "./data/todos.js";
+import { StatusHandler } from "./lib/ButtonFunctions.js";
 
 import {
   createNewCategory,
@@ -26,46 +27,45 @@ const resetCopy = { ...myTodos };
 
 //? Section
 const todosSection = document.querySelector("#todoList");
+let wrapper = document.createElement("div");
+
 const addToDOM = (array) => {
   todosSection.innerText = "";
   array.forEach((el, i) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "card";
-
+    wrapper = document.createElement("div");
     const cardInfo = document.createElement("div");
-    cardInfo.className = "cardInfo";
-
     const cardActions = document.createElement("div");
-    cardActions.className = "cardActions";
-
     const todoStatus = document.createElement("div");
+    const dueDate = document.createElement("p");
+    const title = document.createElement("h3");
+    const delTodo = document.createElement("button");
+
+    wrapper.className = "card";
+    cardInfo.className = "cardInfo";
+    cardActions.className = "cardActions";
+    delTodo.className = "button";
+
     todoStatus.className = el.status
       ? "todoStatus__complete"
       : "todoStatus__default";
 
     // Card Info
-    const title = document.createElement("h3");
     title.textContent = el.title;
-
-    const dueDate = document.createElement("p");
     dueDate.textContent = `Due: ${el.dueDate}`;
 
     cardInfo.appendChild(title);
     cardInfo.appendChild(dueDate);
 
-    // cardActions
-    const editTodo = document.createElement("button");
-
-    const delTodo = document.createElement("button");
-    delTodo.className = "button";
-
-    // cardActions.appendChild(delTodo);
-
-    // Card Append
+    //? Card Append
     wrapper.appendChild(cardInfo);
     // wrapper.appendChild(cardActions);
     wrapper.appendChild(todoStatus);
 
+    todoStatus.addEventListener("click", (event) => {
+      StatusHandler(event, el);
+    });
+
+    //? Section Append
     todosSection.appendChild(wrapper);
   });
 };
@@ -119,3 +119,5 @@ resetButton.addEventListener("click", () => {
   todoData.splice(0);
   addToDOM(todoData);
 });
+
+///
