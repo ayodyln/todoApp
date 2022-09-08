@@ -1,9 +1,9 @@
 /* Color theme from https://coolors.co/40f99b-61707d-b8e1ff-e85d75-ffcf56 */
 :root {
   --medium-spring-green: #40f99bff;
-  --dark-electric-blue: #61707dff;
+  --dark-electric-blue: rgb(69, 85, 99);
   --uranian-blue: #b8e1ffff;
-  --brink-pink: #e85d75ff;
+  --brink-pink: rgb(255, 4, 4);
   --maize-crayola: #ffcf56ff;
 }
 
@@ -34,6 +34,17 @@ main {
   /* border: solid white 1px; */
 }
 
+.createTodo {
+  background-color: var(--dark-electric-blue);
+  border-radius: 0.25em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.inputs {
+  
+}
+
 #todoList {
   /* margin: 2em; */
 }
@@ -53,12 +64,27 @@ main {
 }
 
 .todoStatus__default {
-  width: 1em;
-  background-color: red;
+  width: 3em;
+  background-color: var(--dark-electric-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .todoStatus__complete {
-  width: 1em;
-  background-color: blue;
+  width: 3em;
+  background-color: var(--dark-electric-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fa-check {
+  color: var(--medium-spring-green);
+  font-size: 1.5em;
+}
+.fa-circle {
+  color: var(--brink-pink);
+  font-size: 1.5em;
 }
 
 footer {

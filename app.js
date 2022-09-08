@@ -19,11 +19,8 @@ const todoModel = {
   dueDate: new Date(),
 };
 
-//! Logging
-// console.log(myTodos);
-
 let todoData = myTodos;
-const resetCopy = { ...myTodos };
+const resetCopy = [...myTodos];
 
 //? Section
 const todosSection = document.querySelector("#todoList");
@@ -36,6 +33,7 @@ const addToDOM = (array) => {
     const cardInfo = document.createElement("div");
     const cardActions = document.createElement("div");
     const todoStatus = document.createElement("div");
+    const statusSVG = document.createElement("i");
     const dueDate = document.createElement("p");
     const title = document.createElement("h3");
     const delTodo = document.createElement("button");
@@ -53,8 +51,13 @@ const addToDOM = (array) => {
     title.textContent = el.title;
     dueDate.textContent = `Due: ${el.dueDate}`;
 
+    statusSVG.className = el.status
+      ? "fa-solid fa-check"
+      : "fa-regular fa-circle";
     cardInfo.appendChild(title);
     cardInfo.appendChild(dueDate);
+
+    todoStatus.appendChild(statusSVG);
 
     //? Card Append
     wrapper.appendChild(cardInfo);
@@ -62,7 +65,7 @@ const addToDOM = (array) => {
     wrapper.appendChild(todoStatus);
 
     todoStatus.addEventListener("click", (event) => {
-      StatusHandler(event, el);
+      StatusHandler(event, el, statusSVG);
     });
 
     //? Section Append
@@ -116,7 +119,7 @@ deleteTodoCategories.addEventListener("click", () => {
 
 //! RESET BUTTON
 resetButton.addEventListener("click", () => {
-  todoData.splice(0);
+  todoData = resetCopy;
   addToDOM(todoData);
 });
 
