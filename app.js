@@ -1,6 +1,6 @@
 import myTodos from "./data/todos.js";
+import todoModel from "./data/DataModal.js";
 import { StatusHandler } from "./lib/ButtonFunctions.js";
-console.log(myTodos);
 import {
   createNewCategory,
   createTodo,
@@ -9,22 +9,13 @@ import {
   editTodo,
 } from "./lib/TodoFunctions.js";
 
-//! Data Modal -- DONT EDIT
-const todoModel = {
-  id: NaN,
-  title: "",
-  status: false || true,
-  category: [],
-  startDate: new Date(),
-  dueDate: new Date(),
-};
-
 let todoData = [...myTodos];
 
 //! Create New Todo
 const createTodoBtn = document.querySelector("#submitTodoBtn");
 const titleInput = document.querySelector("#todoTitle");
 const dateInput = document.querySelector("#todoDate");
+const todoCount = document.querySelector(".TodoCount");
 
 createTodoBtn.addEventListener("click", async () => {
   if (!titleInput.value && !dateInput.value) return;
@@ -47,9 +38,11 @@ let wrapper = document.createElement("div");
 
 const addToDOM = (array) => {
   todosSection.innerText = "";
-  array.forEach((el, i) => {
+  array.forEach((el, i, arr) => {
     wrapper = document.createElement("div");
     const cardInfo = document.createElement("div");
+    const cardDel = document.createElement("button");
+    const cardDelText = document.createElement("i");
     const cardActions = document.createElement("div");
     const todoStatus = document.createElement("div");
     const statusSVG = document.createElement("i");
@@ -59,6 +52,7 @@ const addToDOM = (array) => {
 
     wrapper.className = "card";
     cardInfo.className = "cardInfo";
+    cardDel.className = "delTodoButton";
     cardActions.className = "cardActions";
     delTodo.className = "button";
 
@@ -68,7 +62,8 @@ const addToDOM = (array) => {
 
     // Card Info
     title.textContent = el.title;
-    dueDate.textContent = `Due: ${el.dueDate()}`;
+    dueDate.textContent = `Due: ${el.due}`;
+    cardDelText.className = "fa-solid fa-trash";
 
     statusSVG.className = el.status
       ? "fa-solid fa-check"
@@ -77,16 +72,27 @@ const addToDOM = (array) => {
     cardInfo.appendChild(dueDate);
 
     todoStatus.appendChild(statusSVG);
+    cardDel.appendChild(cardDelText);
 
     //? Card Append
     wrapper.appendChild(cardInfo);
-    // wrapper.appendChild(cardActions);
+    wrapper.appendChild(cardDel);
     wrapper.appendChild(todoStatus);
 
     cardInfo.addEventListener("click", (event) => {
-      console.log(el);
       const newTitle = window.prompt("New Todo Title");
-      editTodo(el, { titleInput: newTitle }, addToDOM, todoData);
+      const newDate = window.prompt("New To Do Date: ");
+      editTodo(
+        el,
+        { titleInput: newTitle, dateInput: newDate },
+        addToDOM,
+        todoData
+      );
+    });
+
+    cardDel.addEventListener("click", () => {
+      console.log("oof");
+      deleteTodo(addToDOM, todoData, el, i);
     });
 
     todoStatus.addEventListener("click", (event) => {
@@ -95,47 +101,20 @@ const addToDOM = (array) => {
 
     //? Section Append
     todosSection.appendChild(wrapper);
+
+    todoCount.textContent = `Remaining Tasks - ${arr.length}`;
   });
 };
 addToDOM(todoData);
 
-//? Button Binding
-const createCategoryButton = document.querySelector("#createNewCategory");
-const editTodoButton = document.querySelector("#editTodo");
-const deleteTodoButton = document.querySelector("#delTodoButton");
-const deleteTodoCategories = document.querySelector("#deleteCategoriesButton");
+// //? Button Binding
 const resetButton = document.querySelector("#RESET");
-
-createCategoryButton.addEventListener("click", async () => {
-  await createNewCategory(myTodos[1], ["Test", "Oof"]);
-  console.log(myTodos);
-});
-
-editTodoButton.addEventListener("click", async () => {
-  await editTodo(myTodos[1], {
-    titleInput: "foo",
-    statusInput: true,
-    dateInput: 5000,
-    categoryInput: ["general", "school"],
-  });
-  // console.log(myTodos);
-  addToDOM(todoData);
-});
-
-deleteTodoButton.addEventListener("click", (event) => {
-  deleteTodo(myTodos, myTodos[1]);
-  console.log(myTodos);
-  addToDOM(todoData);
-});
-
-deleteTodoCategories.addEventListener("click", () => {
-  const data = deleteTodoCategory(myTodos[1]);
-  console.log(myTodos);
-});
 
 //! RESET BUTTON
 resetButton.addEventListener("click", () => {
   todoData.length = 0;
   myTodos.forEach((el) => todoData.push(el));
   addToDOM(myTodos);
+  titleInput.value = "";
+  dateInput.value = "";
 });

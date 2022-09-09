@@ -80,7 +80,21 @@ main {
   pointer-events: none;
 }
 
-.cardActions {
+.delTodoButton {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--dark-electric-blue);
+  font-size: 1.25em;
+  margin-right: 1em;
+}
+.delTodoButton:hover {
+  color: var(--maize-crayola);
+}
+
+.TodoCount {
+  text-align: center;
+  color: var(--maize-crayola);
 }
 
 .todoStatus__default {
