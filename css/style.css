@@ -21,6 +21,20 @@ header {
   background-color: var(--maize-crayola);
 }
 
+header > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+}
+
+#RESET {
+  display: unset;
+}
+
 .main__wrapper {
   background-color: grey;
   height: 100%;
@@ -40,9 +54,11 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 6px;
 }
 .inputs {
-  
+  display: flex;
+  gap: 12px;
 }
 
 #todoList {
@@ -58,6 +74,10 @@ main {
 
 .cardInfo {
   width: 100%;
+}
+.cardInfo > h3,
+.cardInfo > p {
+  pointer-events: none;
 }
 
 .cardActions {
@@ -76,6 +96,10 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.todoStatus__complete:hover,
+.todoStatus__default:hover {
+  border: solid 1px white;
 }
 
 .fa-check {

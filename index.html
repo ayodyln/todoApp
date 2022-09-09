@@ -20,17 +20,25 @@
   </head>
   <body>
     <header>
-      <h1 class="title">JS Todo App</h1>
+      <div>
+        <h1 class="is-size-1">JS Todo App</h1>
+        <button class="button" id="RESET">Reset</button>
+      </div>
     </header>
 
     <div class="main__wrapper">
       <main>
         <section class="createTodo">
           <div class="inputs">
-            <input type="text" name="title" id="todoTitle" />
+            <input
+              type="text"
+              name="title"
+              id="todoTitle"
+              placeholder="To Do Title"
+            />
             <input type="date" name="date" id="todoDate" />
           </div>
-          <button id="submitTodoBtn">Submit</button>
+          <button id="submitTodoBtn" class="button">Submit</button>
         </section>
 
         <section id="todoList">
@@ -48,12 +56,10 @@
         </section>
 
         <section id="todoActions">
-          <button id="createTodoBtn">Create Todo</button>
           <button id="createNewCategory">Create New Category</button>
           <button id="editTodo">Edit Todo</button>
           <button id="delTodoButton">Delete Todo</button>
           <button id="deleteCategoriesButton">Delete Categories</button>
-          <button id="RESET">Reset</button>
         </section>
       </main>
     </div>

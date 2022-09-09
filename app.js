@@ -1,6 +1,6 @@
 import myTodos from "./data/todos.js";
 import { StatusHandler } from "./lib/ButtonFunctions.js";
-
+console.log(myTodos);
 import {
   createNewCategory,
   createTodo,
@@ -19,8 +19,27 @@ const todoModel = {
   dueDate: new Date(),
 };
 
-let todoData = myTodos;
-const resetCopy = [...myTodos];
+let todoData = [...myTodos];
+
+//! Create New Todo
+const createTodoBtn = document.querySelector("#submitTodoBtn");
+const titleInput = document.querySelector("#todoTitle");
+const dateInput = document.querySelector("#todoDate");
+
+createTodoBtn.addEventListener("click", async () => {
+  if (!titleInput.value && !dateInput.value) return;
+
+  await createTodo(todoData, todoModel, {
+    title: titleInput.value,
+    date: dateInput.value,
+  });
+
+  console.log(todoData);
+  addToDOM(todoData);
+
+  titleInput.value = "";
+  dateInput.value = "";
+});
 
 //? Section
 const todosSection = document.querySelector("#todoList");
@@ -34,8 +53,8 @@ const addToDOM = (array) => {
     const cardActions = document.createElement("div");
     const todoStatus = document.createElement("div");
     const statusSVG = document.createElement("i");
-    const dueDate = document.createElement("p");
     const title = document.createElement("h3");
+    const dueDate = document.createElement("p");
     const delTodo = document.createElement("button");
 
     wrapper.className = "card";
@@ -49,7 +68,7 @@ const addToDOM = (array) => {
 
     // Card Info
     title.textContent = el.title;
-    dueDate.textContent = `Due: ${el.dueDate}`;
+    dueDate.textContent = `Due: ${el.dueDate()}`;
 
     statusSVG.className = el.status
       ? "fa-solid fa-check"
@@ -64,6 +83,12 @@ const addToDOM = (array) => {
     // wrapper.appendChild(cardActions);
     wrapper.appendChild(todoStatus);
 
+    cardInfo.addEventListener("click", (event) => {
+      console.log(el);
+      const newTitle = window.prompt("New Todo Title");
+      editTodo(el, { titleInput: newTitle }, addToDOM, todoData);
+    });
+
     todoStatus.addEventListener("click", (event) => {
       StatusHandler(event, el, statusSVG);
     });
@@ -75,20 +100,11 @@ const addToDOM = (array) => {
 addToDOM(todoData);
 
 //? Button Binding
-const createTodoButton = document.querySelector("#createTodoBtn");
 const createCategoryButton = document.querySelector("#createNewCategory");
 const editTodoButton = document.querySelector("#editTodo");
 const deleteTodoButton = document.querySelector("#delTodoButton");
 const deleteTodoCategories = document.querySelector("#deleteCategoriesButton");
 const resetButton = document.querySelector("#RESET");
-
-createTodoButton.addEventListener("click", async () => {
-  await createTodo(myTodos, todoModel, {
-    title: "Hello JS World",
-  });
-  console.log(myTodos);
-  addToDOM(todoData);
-});
 
 createCategoryButton.addEventListener("click", async () => {
   await createNewCategory(myTodos[1], ["Test", "Oof"]);
@@ -119,8 +135,7 @@ deleteTodoCategories.addEventListener("click", () => {
 
 //! RESET BUTTON
 resetButton.addEventListener("click", () => {
-  todoData = resetCopy;
-  addToDOM(todoData);
+  todoData.length = 0;
+  myTodos.forEach((el) => todoData.push(el));
+  addToDOM(myTodos);
 });
-
-///
