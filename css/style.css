@@ -58,7 +58,11 @@ main {
 }
 .inputs {
   display: flex;
+  height: 100%;
   gap: 12px;
+}
+#todoTitle {
+  padding: 0.5em;
 }
 
 #todoList {
