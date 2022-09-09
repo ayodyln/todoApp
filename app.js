@@ -25,7 +25,6 @@ createTodoBtn.addEventListener("click", async () => {
     date: dateInput.value,
   });
 
-  console.log(todoData);
   addToDOM(todoData);
 
   titleInput.value = "";
@@ -91,7 +90,6 @@ const addToDOM = (array) => {
     });
 
     cardDel.addEventListener("click", () => {
-      console.log("oof");
       deleteTodo(addToDOM, todoData, el, i);
     });
 
