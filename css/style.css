@@ -134,3 +134,14 @@ footer {
   padding: 1em;
   text-align: center;
 }
+
+.formCategories {
+  display: flex;
+}
+
+.categoriesWrapper {
+  border: solid grey 0.5px;
+  border-radius: 5px;
+  margin: 1em 0;
+  padding: 1em;
+}
