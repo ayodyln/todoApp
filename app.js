@@ -27,13 +27,12 @@ createTodoBtn.addEventListener("click", async () => {
 
 //? Section
 const todosSection = document.querySelector("#todoList");
-let wrapper = document.createElement("div");
 
 const addToDOM = (array) => {
-  todosSection.innerText = "";
+  todosSection.textContent = "";
   array.forEach((el, i, arr) => {
-    wrapper = document.createElement("div");
-    TodoComponent(todosSection, wrapper, el, i, arr, addToDOM, todoData);
+    const wrapper = document.createElement("div");
+    TodoComponent(todosSection, wrapper, el, i, todoData, addToDOM, todoData);
   });
 };
 addToDOM(todoData);

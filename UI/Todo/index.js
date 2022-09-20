@@ -52,23 +52,13 @@ export const TodoComponent = (
   wrapper.appendChild(cardDel);
   wrapper.appendChild(todoStatus);
 
-  cardInfo.addEventListener("click", (event) => {
-    // const newTitle = window.prompt("New Todo Title");
-    // const newDate = window.prompt("New Todo Date: ");
-    // const newUserDate = new Date(newDate);
-    // console.log(newUserDate);
-    // editTodo(
-    //   item,
-    //   { titleInput: newTitle, dateInput: newDate },
-    //   addToDOM,
-    //   todoData
-    // );
-
+  cardInfo.addEventListener("click", () => {
     ModalFunction(item, todoData, wrapper);
   });
 
   cardDel.addEventListener("click", () => {
     deleteTodo(addToDOM, todoData, item, i);
+    todoCount.textContent = `Remaining Tasks - ${arr.length}`;
   });
 
   todoStatus.addEventListener("click", (event) => {
