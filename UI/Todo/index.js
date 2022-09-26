@@ -70,4 +70,3 @@ export const TodoComponent = (
 
   todoCount.textContent = `Remaining Tasks - ${arr.length}`;
 };
-

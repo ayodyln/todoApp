@@ -146,3 +146,26 @@ footer {
 .card {
   display: flex;
 }
+
+.card-content {
+  display: flex;
+  width: 100%;
+  padding: 0;
+
+  pointer-events: none;
+}
+
+.content {
+  width: 100%;
+}
+.cardFooter {
+  display: flex;
+}
+
+.cardFooter > button {
+  margin: 0;
+  width: 3em;
+}
+
+.cardFooter > div {
+}

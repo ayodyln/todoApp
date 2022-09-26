@@ -29,6 +29,10 @@ createTodoBtn.addEventListener("click", async () => {
 //? Section
 const todosSection = document.querySelector("#todoList");
 
+todosSection.addEventListener('click', (event) => {
+  console.log(event)
+})
+
 const todoCount = document.querySelector(".TodoCount");
 
 const addToDOM = (array) => {
@@ -39,25 +43,30 @@ const addToDOM = (array) => {
   // });
 
   array.forEach((todo) => {
-    let todoStatus = todo.status
+    const todoStatus = todo.status
       ? "todoStatus__complete"
       : "todoStatus__default";
+    const statusFeedback = todo.status
+      ? "fa-solid fa-check"
+      : "fa-regular fa-circle";
 
-    let markup = `<div class="card" data-id="${todo.id}">
+    let markup = `<div data-id="${todo.id}" class="card todoItem" >
       <div class="card-content">
         <div class="content">
           <h3>${todo.title}</h3>
           <p>Due ${todo.due}</p>
         </div>
-      </div>
-      <div class='card-footer'>
-        <button class="delTodoButton"><i class="fa-solid fa-trash"></i></button>
-        <div class="${todoStatus}"><i class="fa-solid fa-check"></i></div> 
-      </div>
+        </div>
+        <div class='cardFooter'>
+          <button class="delTodoButton"><i class="fa-solid fa-trash"></i></button>
+          <div class="status ${todoStatus}"><i class="${statusFeedback}"></i></div> 
+        </div>
     </div>`;
 
     todosSection.insertAdjacentHTML("beforeend", markup);
   });
+
+  todosSection.addEventListener("click", (event) => {});
 };
 addToDOM(todoData);
 
@@ -71,9 +80,4 @@ resetButton.addEventListener("click", () => {
   addToDOM(myTodos);
   titleInput.value = "";
   dateInput.value = "";
-});
-
-document.querySelector(".card").addEventListener("click", (event) => {
-  const cardID = event.target.dataset.id * 1;
-  ModalFunction(todoData[cardID], todoData);
 });

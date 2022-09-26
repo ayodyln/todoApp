@@ -1,4 +1,7 @@
 export const ModalFunction = (itemData, Wrapper) => {
+  console.log(itemData)
+  return
+
   const categories = itemData.category;
 
   //! Grabbing Modal Elements
