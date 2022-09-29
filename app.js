@@ -12,10 +12,10 @@ const createTodoBtn = document.querySelector("#submitTodoBtn");
 const titleInput = document.querySelector("#todoTitle");
 const dateInput = document.querySelector("#todoDate");
 
-createTodoBtn.addEventListener("click", async () => {
+createTodoBtn.addEventListener("click", () => {
   if (!titleInput.value && !dateInput.value) return;
 
-  await createTodo(todoData, todoModel, {
+  createTodo(todoData, todoModel, {
     title: titleInput.value,
     date: dateInput.value,
   });
@@ -28,19 +28,10 @@ createTodoBtn.addEventListener("click", async () => {
 
 //? Section
 const todosSection = document.querySelector("#todoList");
-
-todosSection.addEventListener('click', (event) => {
-  console.log(event)
-})
-
 const todoCount = document.querySelector(".TodoCount");
 
 const addToDOM = (array) => {
   todosSection.textContent = "";
-  // array.forEach((el, i, arr) => {
-  //   const wrapper = document.createElement("div");
-  //   TodoComponent(todosSection, wrapper, el, i, todoData, addToDOM, todoData);
-  // });
 
   array.forEach((todo) => {
     const todoStatus = todo.status
@@ -50,7 +41,7 @@ const addToDOM = (array) => {
       ? "fa-solid fa-check"
       : "fa-regular fa-circle";
 
-    let markup = `<div data-id="${todo.id}" class="card todoItem" >
+    let markup = `<div data-todoid="${todo.id}" class="card todoItem" >
       <div class="card-content">
         <div class="content">
           <h3>${todo.title}</h3>
@@ -66,13 +57,28 @@ const addToDOM = (array) => {
     todosSection.insertAdjacentHTML("beforeend", markup);
   });
 
-  todosSection.addEventListener("click", (event) => {});
+  //! Add event listner for the todo container
+  todosSection.addEventListener("click", (event) => {
+    let todoID;
+    if (event.target.dataset.todoid) {
+      todoID = event.target.dataset.todoid;
+    }
+
+    //? Check for Delete Button
+    if (
+      event.target.className === "delTodoButton" ||
+      event.target.className === "fa-solid fa-trash"
+    ) {
+      console.log("Delete Button Clicked");
+      console.log(event.target);
+      deleteTodo(addToDOM, todoData, todoID);
+    }
+  });
 };
 addToDOM(todoData);
 
 // //? Button Binding
 const resetButton = document.querySelector("#RESET");
-
 //! RESET BUTTON
 resetButton.addEventListener("click", () => {
   todoData.length = 0;
