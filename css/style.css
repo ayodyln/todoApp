@@ -169,3 +169,7 @@ footer {
 
 .cardFooter > div {
 }
+
+i {
+  pointer-events: none;
+}

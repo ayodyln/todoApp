@@ -30,7 +30,7 @@ createTodoBtn.addEventListener("click", () => {
 const todosSection = document.querySelector("#todoList");
 const todoCount = document.querySelector(".TodoCount");
 
-const addToDOM = (array) => {
+const addToDOM = ([...array]) => {
   todosSection.textContent = "";
 
   array.forEach((todo) => {
@@ -59,19 +59,20 @@ const addToDOM = (array) => {
 
   //! Add event listner for the todo container
   todosSection.addEventListener("click", (event) => {
-    let todoID;
-    if (event.target.dataset.todoid) {
-      todoID = event.target.dataset.todoid;
+    //! Delete Button
+    if (event.target.className === "delTodoButton") {
+      const parentNodeID = event.target.offsetParent?.dataset.todoid;
+      deleteTodo(addToDOM, array, parentNodeID);
     }
 
-    //? Check for Delete Button
-    if (
-      event.target.className === "delTodoButton" ||
-      event.target.className === "fa-solid fa-trash"
-    ) {
-      console.log("Delete Button Clicked");
+    //! Status Button
+    if (event.target.classList.contains("status")) {
       console.log(event.target);
-      deleteTodo(addToDOM, todoData, todoID);
+    }
+
+    //! Parent Card -> Modal
+    if (event.target.classList.contains("card")) {
+      console.log(event.target);
     }
   });
 };
