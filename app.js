@@ -1,6 +1,11 @@
 import myTodos from "./data/todos.js";
 import todoModel from "./data/DataModal.js";
-import { createTodo, deleteTodo } from "./lib/TodoFunctions.js";
+import {
+  createNewCategory,
+  createTodo,
+  deleteTodo,
+  editStatus,
+} from "./lib/TodoFunctions.js";
 
 import { TodoComponent } from "./UI/Todo/index.js";
 import { ModalFunction } from "./UI/Modal/index.js";
@@ -30,7 +35,7 @@ createTodoBtn.addEventListener("click", () => {
 const todosSection = document.querySelector("#todoList");
 const todoCount = document.querySelector(".TodoCount");
 
-const addToDOM = ([...array]) => {
+const addToDOM = (array) => {
   todosSection.textContent = "";
 
   array.forEach((todo) => {
@@ -58,21 +63,32 @@ const addToDOM = ([...array]) => {
   });
 
   //! Add event listner for the todo container
-  todosSection.addEventListener("click", (event) => {
+  todosSection.addEventListener("click", async (event) => {
     //! Delete Button
     if (event.target.className === "delTodoButton") {
       const parentNodeID = event.target.offsetParent?.dataset.todoid;
       deleteTodo(addToDOM, array, parentNodeID);
+      return;
     }
 
     //! Status Button
     if (event.target.classList.contains("status")) {
-      console.log(event.target);
+      const parentNodeID = event.target.offsetParent?.dataset.todoid;
+      editStatus(addToDOM, array, parentNodeID, event.target);
+      return;
     }
 
     //! Parent Card -> Modal
     if (event.target.classList.contains("card")) {
       console.log(event.target);
+
+      const itemData = array.filter(
+        (el) => el.id === event.target.dataset.todoid * 1
+      )[0];
+
+      console.log(itemData);
+      ModalFunction(itemData);
+      return;
     }
   });
 };
@@ -82,9 +98,7 @@ addToDOM(todoData);
 const resetButton = document.querySelector("#RESET");
 //! RESET BUTTON
 resetButton.addEventListener("click", () => {
-  todoData.length = 0;
-  myTodos.forEach((el) => todoData.push(el));
-  addToDOM(myTodos);
+  // everyhting i tried doesn't work and freezez the browser.
   titleInput.value = "";
   dateInput.value = "";
 });

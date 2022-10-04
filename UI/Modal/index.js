@@ -1,6 +1,6 @@
 export const ModalFunction = (itemData, Wrapper) => {
   console.log(itemData)
-  return
+  // return
 
   const categories = itemData.category;
 
