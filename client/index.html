@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <!--! Styling with help from Bulma -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+
+    <script
+      src="https://kit.fontawesome.com/42a4a84ffd.js"
+      crossorigin="anonymous"
+      defer
+    ></script>
+
+    <script src="index.js" type="module" defer></script>
+
+    <title>JS Todo App Assignment</title>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1 class="is-size-1">JS Todo App</h1>
+        <button class="button" id="RESET">Reset</button>
+      </div>
+    </header>
+
+    <div class="main__wrapper is-clipped">
+      <main>
+        <section class="createTodo">
+          <div class="inputs">
+            <input
+              type="text"
+              name="title"
+              id="todoTitle"
+              placeholder="To Do Title"
+            />
+            <input type="date" name="date" id="todoDate" />
+          </div>
+          <button id="submitTodoBtn" class="button">Submit</button>
+        </section>
+
+        <section id="todoList"></section>
+        <p class="TodoCount"></p>
+
+        <!-- TODO MODAL -->
+        <div class="modal-wrapper"></div>
+      </main>
+    </div>
+
+    <footer>
+      <p>Created By Dylan Smith for DGM 3760, Utah Valley University.</p>
+    </footer>
+  </body>
+</html>
