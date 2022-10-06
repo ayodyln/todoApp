@@ -173,3 +173,15 @@ footer {
 i {
   pointer-events: none;
 }
+
+.CategoryList {
+  display: flex;
+  gap: 1rem;
+}
+.CategoryList > li {
+  display: flex;
+  align-items: center;
+}
+.tag {
+  padding: 1rem;
+}

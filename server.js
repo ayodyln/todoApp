@@ -4,7 +4,7 @@ const port = 3000;
 
 app.use(express.static("client"));
 
-let myTodos = [
+const myTodos = [
   {
     id: 0,
     title: "Todo Example #1",

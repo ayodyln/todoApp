@@ -35,27 +35,30 @@ export const createNewCategory = async (todo, userInput) => {
 
 //! Editing
 
-export const editTodo = async (todo, userInput, func, arr) => {
-  //* Deconstructing User Todo and userInput
-  const { title, status, category, startDate, dueDate } = todo;
-  const { titleInput, statusInput, categoryInput, dateInput } = userInput;
-
+export const editTodo = async (
+  todo,
+  { newTitle, newDue, newCategories },
+  func,
+  arr
+) => {
   //* Editing Todo, userInput Checked.
-  const newTitle = !titleInput ? title : titleInput;
-  const newStatus = editTodoStatus(statusInput, status);
+  if (newTitle !== "" || newDue !== "" || newCategories.length !== 0) {
+    // console.log(
+    //   newTitle === "" ? null : newTitle,
+    //   newDue === "" ? null : newDue
+    // );
 
-  // LEFT OFF HERE
-  const newDueDate = editTodoDate(dateInput, startDate, dueDate);
+    todo.title = newTitle !== "" ? newTitle : todo.title;
+    todo.due = newDue !== "" ? newDue : todo.due;
+
+    todo.category = newCategories.length !== 0 ? [...newCategories] : [];
+  } else {
+    console.log("No Input");
+  }
 
   // Checking for new categories and pushing them. If present
-  if (categoryInput) editTodoCategory(category, categoryInput);
 
   //* Updating Todo
-  todo.title = newTitle;
-  todo.status = newStatus;
-  todo.dueDate = newDueDate;
-
-  console.log(todo);
 
   func(arr);
 };

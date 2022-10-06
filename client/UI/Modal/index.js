@@ -1,10 +1,28 @@
-export const ModalFunction = (itemData, Wrapper) => {
-  // const categories = itemData.category;
+import { editTodo } from "../../lib/TodoFunctions.js";
 
-  const modalWrapper = document.querySelector(".modal-wrapper");
+const userInput = {
+  newTitle: "",
+  newDue: "",
+  newCategories: [],
+};
+
+export const ModalFunction = async (itemData, func, arr) => {
+  const categories = [...itemData.category];
+
+  const modalWrapper = document.querySelector("main");
+
+  //? Landon -> I had to do this loop to delete duplicated modals from event listners.
+  // Comment out the loop below and watch the DOM to see the modal be duplicated in the main dom element.
+  modalWrapper.childNodes.forEach((node) => {
+    if (node.className === "modal is-active") {
+      // console.log(node);
+      node.remove();
+    }
+  });
 
   let active = "is-active";
 
+  //! Sick use of the Map method in this markup
   let markup = `<div class="modal ${active}">
   <div class="modal-background"></div>
   <div class="modal-card">
@@ -17,7 +35,7 @@ export const ModalFunction = (itemData, Wrapper) => {
       <div class="field">
         <label class="label">Todo Title</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Text input" />
+          <input id="titleInput" class="input" type="text" placeholder="Text input" />
         </div>
       </div>
 
@@ -29,6 +47,7 @@ export const ModalFunction = (itemData, Wrapper) => {
             type="date"
             placeholder="Text input"
             value="bulma"
+            id="dateInput"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-calendar"></i>
@@ -43,7 +62,11 @@ export const ModalFunction = (itemData, Wrapper) => {
           <button class="button is-info">Add</button>
         </div>
         <div class="categoriesWrapper">
-          <ul class="CategoryList"></ul>
+          <ul class="CategoryList">${categories
+            .map((el, i) => {
+              return `<li><span data-id=${i} class="tag is-grey">${el} <button id="tagDelete" class="delete is-small"></button></span></li>`;
+            })
+            .join("")}</ul>
         </div>
       </div>
     </section>
@@ -75,20 +98,40 @@ export const ModalFunction = (itemData, Wrapper) => {
 
   modalWrapper.insertAdjacentHTML("beforeend", markup);
 
-  modalWrapper.addEventListener("click", (e) => {
+  modalWrapper.addEventListener("click", async (e) => {
     if (e.target.id === "closeBtn") {
       const card = e.target.parentElement.parentElement.parentElement;
       card.remove();
+      return;
     } else if (e.target.className === "modal-background") {
       const card = e.target.parentElement;
       card.remove();
+      return;
     } else if (e.target.id === "submit") {
-      console.log(e.target);
+      const card =
+        e.target.parentElement.parentElement.parentElement.parentElement
+          .parentElement;
+
+      userInput.newTitle = document.querySelector("#titleInput")?.value;
+      userInput.newDue = document.querySelector("#dateInput")?.value;
+      userInput.newCategories = categories;
+
+      await editTodo(itemData, userInput, func, arr);
+      card.remove();
+      return;
     } else if (e.target.id === "cancel") {
       const card =
         e.target.parentElement.parentElement.parentElement.parentElement
           .parentElement;
       card.remove();
+      modalWrapper.removeChild();
+      return;
+    }
+   
+    if (e.target.id === "tagDelete") {
+      categories.splice(e.target.parentElement.dataset.id * 1, 1);
+      e.target.parentElement.parentElement.remove();
+      return;
     }
   });
 };

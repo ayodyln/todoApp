@@ -32,7 +32,7 @@ const addToDOM = async (array) => {
       ? "fa-solid fa-check"
       : "fa-regular fa-circle";
 
-    let markup = `<div data-todoid="${todo.id}" class="card todoItem" >
+    let markup = `<div data-todoid="${todo.id}" id="card" class="card todoItem" >
       <div class="card-content">
         <div class="content">
           <h3>${todo.title}</h3>
@@ -40,8 +40,8 @@ const addToDOM = async (array) => {
         </div>
         </div>
         <div class='cardFooter'>
-          <button class="delTodoButton"><i class="fa-solid fa-trash"></i></button>
-          <div class="status ${todoStatus}"><i class="${statusFeedback}"></i></div> 
+          <button id="delete" class="delTodoButton"><i class="fa-solid fa-trash"></i></button>
+          <div id="status" class="status ${todoStatus}"><i class="${statusFeedback}"></i></div> 
         </div>
     </div>`;
 
@@ -51,29 +51,27 @@ const addToDOM = async (array) => {
   //! Add event listner for the todo container
   todosSection.addEventListener("click", async (event) => {
     //! Delete Button
-    if (event.target.className === "delTodoButton") {
+    if (event.target.id === "delete") {
       const parentNodeID = event.target.offsetParent?.dataset.todoid;
       deleteTodo(addToDOM, array, parentNodeID);
       return;
     }
 
     //! Status Button
-    else if (event.target.classList.contains("status")) {
+    if (event.target.id === "status") {
       const parentNodeID = event.target.offsetParent?.dataset.todoid;
       editStatus(addToDOM, array, parentNodeID, event.target);
       return;
     }
 
     //! Parent Card -> Modal
-    else if (event.target.classList.contains("card")) {
+    if (event.target.id === "card") {
       const itemData = array.filter(
         (el) => el.id === event.target.dataset.todoid * 1
       )[0];
-      ModalFunction(itemData);
+      await ModalFunction(itemData, addToDOM, todoData);
       return;
     }
-    //
-    else return;
   });
 
   createTodoBtn.addEventListener("click", () => {
