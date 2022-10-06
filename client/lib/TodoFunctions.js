@@ -43,22 +43,19 @@ export const editTodo = async (
 ) => {
   //* Editing Todo, userInput Checked.
   if (newTitle !== "" || newDue !== "" || newCategories.length !== 0) {
-    // console.log(
-    //   newTitle === "" ? null : newTitle,
-    //   newDue === "" ? null : newDue
-    // );
+    console.log(
+      newTitle === "" ? null : newTitle,
+      newDue === "" ? null : newDue
+    );
 
+    // Edit Todo is making my object become undefined?
     todo.title = newTitle !== "" ? newTitle : todo.title;
     todo.due = newDue !== "" ? newDue : todo.due;
 
-    todo.category = newCategories.length !== 0 ? [...newCategories] : [];
+    todo.category = newCategories.length > 0 ? [...newCategories] : [];
   } else {
     console.log("No Input");
   }
-
-  // Checking for new categories and pushing them. If present
-
-  //* Updating Todo
 
   func(arr);
 };
@@ -79,6 +76,7 @@ export const editStatus = (func, array, id, element) => {
       }
     }
   });
+  console.log(array);
   func(array);
 };
 
@@ -116,8 +114,6 @@ export const deleteTodo = (func, array, index) => {
 
   // const myTodo = array.filter((todo) => todo.id === index * 1)[0];
   // array.splice(myTodo, 1);
-
-  func(array);
 };
 
 export const deleteTodoCategory = (todo) => {

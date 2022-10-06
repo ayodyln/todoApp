@@ -103,11 +103,14 @@ export const ModalFunction = async (itemData, func, arr) => {
       const card = e.target.parentElement.parentElement.parentElement;
       card.remove();
       return;
-    } else if (e.target.className === "modal-background") {
+    }
+
+    if (e.target.className === "modal-background") {
       const card = e.target.parentElement;
       card.remove();
-      return;
-    } else if (e.target.id === "submit") {
+    }
+
+    if (e.target.id === "submit") {
       const card =
         e.target.parentElement.parentElement.parentElement.parentElement
           .parentElement;
@@ -118,16 +121,16 @@ export const ModalFunction = async (itemData, func, arr) => {
 
       await editTodo(itemData, userInput, func, arr);
       card.remove();
-      return;
-    } else if (e.target.id === "cancel") {
+    }
+
+    if (e.target.id === "cancel") {
       const card =
         e.target.parentElement.parentElement.parentElement.parentElement
           .parentElement;
       card.remove();
       modalWrapper.removeChild();
-      return;
     }
-   
+
     if (e.target.id === "tagDelete") {
       categories.splice(e.target.parentElement.dataset.id * 1, 1);
       e.target.parentElement.parentElement.remove();
