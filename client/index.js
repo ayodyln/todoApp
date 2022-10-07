@@ -1,11 +1,6 @@
 import myTodos from "./data/todos.js";
 import todoModel from "./data/DataModal.js";
-import {
-  createNewCategory,
-  createTodo,
-  deleteTodo,
-  editStatus,
-} from "./lib/TodoFunctions.js";
+import { createTodo, deleteTodo, editStatus } from "./lib/TodoFunctions.js";
 
 import { ModalFunction } from "./UI/Modal/index.js";
 
@@ -30,11 +25,18 @@ export const addToDOM = (array) => {
       ? "fa-solid fa-check"
       : "fa-regular fa-circle";
 
-    let markup = `<div data-todoid="${todo.id}" id="card" class="card todoItem" >
+    let markup = `<div data-todoid="${
+      todo.id
+    }" id="card" class="card todoItem" >
       <div class="card-content">
         <div class="content">
           <h3>${todo.title}</h3>
           <p>Due ${todo.due}</p>
+          <p>${todo.category
+            .map((el, i) => {
+              return `<span class="tag" data-category="${i}">${el}</span>`;
+            })
+            .join(" ")}</p>
         </div>
         </div>
         <div class='cardFooter'>
@@ -45,6 +47,8 @@ export const addToDOM = (array) => {
 
     todosSection.insertAdjacentHTML("beforeend", markup);
   });
+
+  todoCount.textContent = `Remaining Todos: ${array.length}`;
 
   //! Add event listner for the todo container
   todosSection.addEventListener("click", (event) => {
@@ -70,25 +74,24 @@ export const addToDOM = (array) => {
   createTodoBtn.addEventListener("click", () => {
     if (!titleInput.value && !dateInput.value) return;
 
-    createTodo(myTodos, todoModel, {
-      title: titleInput.value,
-      date: dateInput.value,
-    });
+    createTodo(titleInput.value, dateInput.value);
 
     addToDOM(myTodos);
-
     titleInput.value = "";
     dateInput.value = "";
   });
 };
 
+//? Render To Do's on page Load
 addToDOM(myTodos);
 
 //! RESET BUTTON
 resetButton.addEventListener("click", () => {
+  //? Resets To Do's Array; Regenerates DOM with addToDom(<array>)
   myTodos.splice(0, myTodos.length);
   addToDOM(myTodos);
 
+  //? Reset UI Form Inputs
   titleInput.value = "";
   dateInput.value = "";
 });

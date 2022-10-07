@@ -31,20 +31,23 @@
 
     <div class="main__wrapper is-clipped">
       <main>
-        <section class="createTodo">
-          <div class="inputs">
-            <input
-              type="text"
-              name="title"
-              id="todoTitle"
-              placeholder="To Do Title"
-            />
-            <input type="date" name="date" id="todoDate" />
-          </div>
-          <button id="submitTodoBtn" class="button">Submit</button>
-        </section>
+        <div class="content-wrapper">
+          <section class="createTodo">
+            <div class="inputs">
+              <input
+                type="text"
+                name="title"
+                id="todoTitle"
+                placeholder="To Do Title"
+              />
+              <input type="date" name="date" id="todoDate" />
+            </div>
+            <button id="submitTodoBtn" class="button">Submit</button>
+          </section>
 
-        <section id="todoList"></section>
+          <section id="todoList"></section>
+        </div>
+
         <p class="TodoCount"></p>
       </main>
     </div>
