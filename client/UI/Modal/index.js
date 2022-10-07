@@ -1,4 +1,5 @@
 import { editTodo } from "../../lib/TodoFunctions.js";
+import myTodos from "../../data/todos.js";
 
 const userInput = {
   newTitle: "",
@@ -6,18 +7,15 @@ const userInput = {
   newCategories: [],
 };
 
-export const ModalFunction = async (itemData, func, arr) => {
-  const categories = [...itemData.category];
+export const ModalFunction = (parentNodeID) => {
+  const myTodo = myTodos.find((todo) => todo.id === parentNodeID);
+  const categories = myTodo.category;
 
   const modalWrapper = document.querySelector("main");
-
   //? Landon -> I had to do this loop to delete duplicated modals from event listners.
   // Comment out the loop below and watch the DOM to see the modal be duplicated in the main dom element.
   modalWrapper.childNodes.forEach((node) => {
-    if (node.className === "modal is-active") {
-      // console.log(node);
-      node.remove();
-    }
+    if (node.className === "modal is-active") node.remove();
   });
 
   let active = "is-active";
@@ -27,7 +25,10 @@ export const ModalFunction = async (itemData, func, arr) => {
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title">${itemData.title}</p>
+      <div class="mh">
+        <p class="modal-card-title">${myTodo.title}</p>
+        <p>${myTodo.due}</p>
+      </div>
       <button class="delete" id="closeBtn" aria-label="close"></button>
     </header>
     
@@ -35,7 +36,9 @@ export const ModalFunction = async (itemData, func, arr) => {
       <div class="field">
         <label class="label">Todo Title</label>
         <div class="control">
-          <input id="titleInput" class="input" type="text" placeholder="Text input" />
+          <input id="titleInput" class="input" type="text" placeholder="${
+            myTodo.title
+          }" />
         </div>
       </div>
 
@@ -45,7 +48,6 @@ export const ModalFunction = async (itemData, func, arr) => {
           <input
             class="input"
             type="date"
-            placeholder="Text input"
             value="bulma"
             id="dateInput"
           />
@@ -98,43 +100,28 @@ export const ModalFunction = async (itemData, func, arr) => {
 
   modalWrapper.insertAdjacentHTML("beforeend", markup);
 
-  modalWrapper.addEventListener("click", async (e) => {
-    if (e.target.id === "closeBtn") {
-      const card = e.target.parentElement.parentElement.parentElement;
-      card.remove();
-      return;
-    }
+  const modal = document.querySelector(".modal");
 
-    if (e.target.className === "modal-background") {
-      const card = e.target.parentElement;
-      card.remove();
-    }
+  modalWrapper.addEventListener("click", (e) => {
+    if (
+      e.target.className === "modal-background" ||
+      e.target.id === "cancel" ||
+      e.target.id === "closeBtn"
+    )
+      modal?.remove();
 
     if (e.target.id === "submit") {
-      const card =
-        e.target.parentElement.parentElement.parentElement.parentElement
-          .parentElement;
-
-      userInput.newTitle = document.querySelector("#titleInput")?.value;
-      userInput.newDue = document.querySelector("#dateInput")?.value;
+      userInput.newTitle = document.querySelector("#titleInput").value;
+      userInput.newDue = document.querySelector("#dateInput").value;
       userInput.newCategories = categories;
 
-      await editTodo(itemData, userInput, func, arr);
-      card.remove();
-    }
-
-    if (e.target.id === "cancel") {
-      const card =
-        e.target.parentElement.parentElement.parentElement.parentElement
-          .parentElement;
-      card.remove();
-      modalWrapper.removeChild();
+      editTodo(itemData, userInput);
+      modal?.remove();
     }
 
     if (e.target.id === "tagDelete") {
       categories.splice(e.target.parentElement.dataset.id * 1, 1);
       e.target.parentElement.parentElement.remove();
-      return;
     }
   });
 };

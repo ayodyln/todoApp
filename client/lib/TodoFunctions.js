@@ -1,4 +1,5 @@
-//? Functions
+import { addToDOM } from "../index.js";
+import myTodos from "../data/todos.js";
 
 //! Creeation
 export const createTodo = (todoArray, dataModal, userInput) => {
@@ -35,12 +36,7 @@ export const createNewCategory = async (todo, userInput) => {
 
 //! Editing
 
-export const editTodo = async (
-  todo,
-  { newTitle, newDue, newCategories },
-  func,
-  arr
-) => {
+export const editTodo = async (todo, { newTitle, newDue, newCategories }) => {
   //* Editing Todo, userInput Checked.
   if (newTitle !== "" || newDue !== "" || newCategories.length !== 0) {
     console.log(
@@ -57,14 +53,14 @@ export const editTodo = async (
     console.log("No Input");
   }
 
-  func(arr);
+  addToDOM(myTodos);
 };
 
 const editTodoStatus = (statusInput, status) =>
   !statusInput ? status : statusInput;
 
-export const editStatus = (func, array, id, element) => {
-  array.forEach((todo) => {
+export const editStatus = (id, element) => {
+  myTodos.forEach((todo) => {
     if (todo.id === id * 1) {
       todo.status = todo.status ? false : true;
       if (element.classList.contains("todoStatus__complete")) {
@@ -76,8 +72,7 @@ export const editStatus = (func, array, id, element) => {
       }
     }
   });
-  console.log(array);
-  func(array);
+  addToDOM(myTodos);
 };
 
 //? Create funciton useful
@@ -103,17 +98,14 @@ export const completeTodo = (todo) => (todo.status = true);
 
 //! Delete
 
-export const deleteTodo = (func, array, index) => {
-  //TODO: Lando, why is a loop here working instead of the filter method then splice?
-  array.forEach((todo, i) => {
+export const deleteTodo = (index) => {
+  myTodos.forEach((todo, i) => {
     if (todo.id === index * 1) {
-      array.splice(i, 1);
+      myTodos.splice(i, 1);
     }
   });
-  func(array);
 
-  // const myTodo = array.filter((todo) => todo.id === index * 1)[0];
-  // array.splice(myTodo, 1);
+  addToDOM(myTodos);
 };
 
 export const deleteTodoCategory = (todo) => {

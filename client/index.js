@@ -9,8 +9,6 @@ import {
 
 import { ModalFunction } from "./UI/Modal/index.js";
 
-let todoData = [...myTodos];
-
 //! Create New Todo
 const createTodoBtn = document.querySelector("#submitTodoBtn");
 const titleInput = document.querySelector("#todoTitle");
@@ -21,10 +19,10 @@ const todosSection = document.querySelector("#todoList");
 const todoCount = document.querySelector(".TodoCount");
 const resetButton = document.querySelector("#RESET");
 
-const addToDOM = async (array) => {
+export const addToDOM = (array) => {
   todosSection.textContent = "";
 
-  await array.forEach(async (todo) => {
+  array.forEach((todo) => {
     const todoStatus = todo.status
       ? "todoStatus__complete"
       : "todoStatus__default";
@@ -49,71 +47,59 @@ const addToDOM = async (array) => {
   });
 
   //! Add event listner for the todo container
-  todosSection.addEventListener("click", async (event) => {
+  todosSection.addEventListener("click", (event) => {
     //! Delete Button
     if (event.target.id === "delete") {
       const parentNodeID = event.target.offsetParent?.dataset.todoid;
-      deleteTodo(addToDOM, array, parentNodeID);
-      return;
+      deleteTodo(parentNodeID);
     }
 
     //! Status Button
     if (event.target.id === "status") {
       const parentNodeID = event.target.offsetParent?.dataset.todoid;
-      editStatus(addToDOM, array, parentNodeID, event.target);
-      return;
+      editStatus(parentNodeID, event.target);
     }
 
     //! Parent Card -> Modal
     if (event.target.id === "card") {
-      const itemData = array.filter(
-        (el) => el.id === event.target.dataset.todoid * 1
-      )[0];
-      await ModalFunction(itemData, addToDOM, todoData);
-      return;
+      const parentNodeID = event.target.dataset.todoid * 1;
+      ModalFunction(parentNodeID);
     }
   });
 
   createTodoBtn.addEventListener("click", () => {
     if (!titleInput.value && !dateInput.value) return;
 
-    createTodo(todoData, todoModel, {
+    createTodo(myTodos, todoModel, {
       title: titleInput.value,
       date: dateInput.value,
     });
 
-    addToDOM(todoData);
+    addToDOM(myTodos);
 
     titleInput.value = "";
     dateInput.value = "";
   });
 };
-addToDOM(todoData);
 
-// //? Button Binding
+addToDOM(myTodos);
+
 //! RESET BUTTON
 resetButton.addEventListener("click", () => {
-  // everyhting i tried doesn't work and freezez the browser.
-  todoData.splice(0, todoData.length);
-  todoData.push(...myTodos);
-  addToDOM(todoData);
+  myTodos.splice(0, myTodos.length);
+  addToDOM(myTodos);
 
   titleInput.value = "";
   dateInput.value = "";
 });
 
 // Fetching Local Server API Data
-const getTodos = async () => {
-  try {
-    const res = await fetch("/todos");
-    const data = await res.json();
-
-    console.log(`%c[GET Todos]`, "color: yellow");
-    console.table(data);
-
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-const todos = await getTodos();
+// const getTodos = async () => {
+//   try {
+//     const res = await fetch("/todos");
+//     return await res.json();
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+// const todos = await getTodos();
