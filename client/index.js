@@ -1,7 +1,5 @@
 import myTodos from "./data/todos.js";
-import todoModel from "./data/DataModal.js";
 import { createTodo, deleteTodo, editStatus } from "./lib/TodoFunctions.js";
-
 import { ModalFunction } from "./UI/Modal/index.js";
 
 //! Create New Todo
@@ -13,6 +11,17 @@ const dateInput = document.querySelector("#todoDate");
 const todosSection = document.querySelector("#todoList");
 const todoCount = document.querySelector(".TodoCount");
 const resetButton = document.querySelector("#RESET");
+
+// Fetching Local Server API Data
+const getTodos = async () => {
+  try {
+    const res = await fetch("/todos");
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+// const todos = await getTodos();
 
 export const addToDOM = (array) => {
   todosSection.textContent = "";
@@ -95,14 +104,3 @@ resetButton.addEventListener("click", () => {
   titleInput.value = "";
   dateInput.value = "";
 });
-
-// Fetching Local Server API Data
-// const getTodos = async () => {
-//   try {
-//     const res = await fetch("/todos");
-//     return await res.json();
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-// const todos = await getTodos();
