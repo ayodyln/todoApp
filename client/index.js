@@ -85,12 +85,7 @@ export const addToDOM = (array) => {
 
   // Creating Todos
   createTodoBtn.addEventListener("click", () => {
-    if (
-      (!titleInput.value && !dateInput.value) ||
-      !dateInput.value ||
-      !titleInput.value
-    )
-      return;
+    if (!dateInput.value || !titleInput.value) return;
 
     createTodo(titleInput.value, dateInput.value);
 
