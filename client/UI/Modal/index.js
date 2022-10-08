@@ -1,26 +1,27 @@
 import { editTodo } from "../../lib/TodoFunctions.js";
 import myTodos from "../../data/todos.js";
 
+// Default Object
 const userInput = {
   newTitle: "",
   newDue: "",
   newCategories: [],
 };
 
-const modalWrapper = document.querySelector("main");
+const main = document.querySelector("main");
 
 export const ModalFunction = (parentNodeID) => {
   const myTodo = myTodos.find((todo) => todo.id === parentNodeID);
   const categories = myTodo.category;
 
   //? Fix for the Modal Duplication BUG in DOM.
-  modalWrapper.childNodes.forEach((node) => {
+  main.childNodes.forEach((node) => {
     if (node.className === "modal is-active") node.remove();
   });
 
   let active = "is-active";
 
-  modalWrapper.insertAdjacentHTML(
+  main.insertAdjacentHTML(
     "beforeend",
     modalMarkup(active, myTodo.title, myTodo.due)
   );
@@ -57,7 +58,7 @@ export const ModalFunction = (parentNodeID) => {
   const newInput = document.querySelector("#categoriesInput");
 
   const modal = document.querySelector(".modal");
-  modalWrapper.addEventListener("click", (e) => {
+  main.addEventListener("click", (e) => {
     if (
       e.target.className === "modal-background" ||
       e.target.id === "cancel" ||

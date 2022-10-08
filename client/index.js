@@ -2,12 +2,10 @@ import myTodos from "./data/todos.js";
 import { createTodo, deleteTodo, editStatus } from "./lib/TodoFunctions.js";
 import { ModalFunction } from "./UI/Modal/index.js";
 
-//! Create New Todo
+//! DOM Elements
 const createTodoBtn = document.querySelector("#submitTodoBtn");
 const titleInput = document.querySelector("#todoTitle");
 const dateInput = document.querySelector("#todoDate");
-
-//? Section
 const todosSection = document.querySelector("#todoList");
 const todoCount = document.querySelector(".TodoCount");
 const resetButton = document.querySelector("#RESET");
@@ -24,8 +22,11 @@ const getTodos = async () => {
 // const todos = await getTodos();
 
 export const addToDOM = (array) => {
+  // Clear Todo' DOM Section
   todosSection.textContent = "";
 
+  // Looping through Todo's array
+  // Creating markup and inserting into document.
   array.forEach((todo) => {
     const todoStatus = todo.status
       ? "todoStatus__complete"
@@ -54,12 +55,14 @@ export const addToDOM = (array) => {
         </div>
     </div>`;
 
+    // Adding markup to DOM
     todosSection.insertAdjacentHTML("beforeend", markup);
   });
 
+  // Displaying Total Todos Remaining.
   todoCount.textContent = `Remaining Todos: ${array.length}`;
 
-  //! Add event listner for the todo container
+  // Using event listerner on the parent element. Add checks along the way for UI elements.
   todosSection.addEventListener("click", (event) => {
     //! Delete Button
     if (event.target.id === "delete") {
@@ -80,8 +83,14 @@ export const addToDOM = (array) => {
     }
   });
 
+  // Creating Todos
   createTodoBtn.addEventListener("click", () => {
-    if (!titleInput.value && !dateInput.value) return;
+    if (
+      (!titleInput.value && !dateInput.value) ||
+      !dateInput.value ||
+      !titleInput.value
+    )
+      return;
 
     createTodo(titleInput.value, dateInput.value);
 
