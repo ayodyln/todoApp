@@ -1,60 +1,52 @@
-import { addToDOM } from "../index.js";
-import myTodos from "../data/todos.js";
-
-const todoModel = {
-  id: NaN,
-  title: "",
-  status: false || true,
-  category: ["General"],
-  due: "",
-};
+import {
+  addToDOM,
+  checkSVG,
+  circleSVG,
+  renderCatgorieOptions,
+} from "../index.js"
+import {
+  getTodos,
+  newTodo,
+  updateTodoStatus,
+  delTodo,
+  updateTodo,
+} from "./Todos.js"
 
 //! Creeation
-export const createTodo = (title, date) => {
-  const todo = { ...todoModel };
+export const createTodo = async (title, date, array) => {
+  const todoModel = new Object({
+    id: array.length,
+    title: title,
+    status: false,
+    due: date,
+    category: ["General"],
+  })
 
-  todo.id = myTodos.length;
-  todo.title = title;
-  todo.status = false;
-  todo.due = date;
+  const todoData = await newTodo(todoModel)
 
-  myTodos.push(todo);
-  addToDOM(myTodos);
-};
+  addToDOM(todoData)
+}
 
 //! Editing
-export const editTodo = (todo, { newTitle, newDue }, categories) => {
-  todo.title = newTitle === "" ? todo.title : newTitle;
-  todo.due = newDue === "" ? todo.due : newDue;
-  addToDOM(myTodos);
-};
+export const editTodo = async (todo, input) => {
+  await updateTodo(todo, input)
+  const todos = await getTodos()
+  renderCatgorieOptions(todos)
+  // addToDOM(todos);
+  return todos
+}
 
-export const editStatus = (id, element) => {
-  myTodos.forEach((todo) => {
-    if (todo.id === id * 1) {
-      todo.status = todo.status ? false : true;
-      if (element.classList.contains("todoStatus__complete")) {
-        element.classList.remove("todoStatus__complete");
-        element.classList.add("todoStatus__default");
-      } else if (element.classList.contains("todoStatus__default")) {
-        element.classList.remove("todoStatus__default");
-        element.classList.add("todoStatus__complete");
-      }
-    }
-  });
+export const editStatus = async (id, element) => {
+  const todo = await updateTodoStatus(id * 1)
 
-  addToDOM(myTodos);
-};
+  element.textContent = ""
+  const text = todo.status ? checkSVG : circleSVG
 
-//! Complete Todo
-export const completeTodo = (todo) => (todo.status = true);
+  element.insertAdjacentHTML("afterbegin", text)
+}
 
 //! Delete
-export const deleteTodo = (index) => {
-  myTodos.forEach((todo, i) => {
-    if (todo.id === index * 1) {
-      myTodos.splice(i, 1);
-    }
-  });
-  addToDOM(myTodos);
-};
+export const deleteTodo = async (index) => {
+  const res = await delTodo(index * 1)
+  addToDOM(res)
+}

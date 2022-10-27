@@ -25,7 +25,10 @@
     <header>
       <div>
         <h1 class="is-size-1">JS Todo App</h1>
-        <button class="button" id="RESET">Reset</button>
+        <div>
+          <button class="button" id="RESET">Reset</button>
+          <button class="button" id="CLEAR">Clear Completed</button>
+        </div>
       </div>
     </header>
 
@@ -45,10 +48,88 @@
             <button id="submitTodoBtn" class="button">Submit</button>
           </section>
 
+          <section class="filterButtons">
+            <div class="select">
+              <select name="categories" id="categorySelect">
+                <option value="All Categories" selected id="categoriesSelector">
+                  All Categories
+                </option>
+              </select>
+            </div>
+          </section>
+
           <section id="todoList"></section>
         </div>
 
         <p class="TodoCount"></p>
+
+        <!--! MODAL -->
+        <div class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <div class="mh">
+                <p class="modal-card-title"></p>
+                <p class="dueDate"></p>
+              </div>
+              <button class="delete" id="closeBtn" aria-label="close"></button>
+            </header>
+
+            <section class="modal-card-body">
+              <div class="field">
+                <label class="label">Todo Title</label>
+                <div class="control">
+                  <input
+                    id="titleInput"
+                    class="input"
+                    type="text"
+                    placeholder="${title}"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Due Date</label>
+                <div class="control has-icons-left has-icons-right">
+                  <input class="input" type="date" id="dateInput" />
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-calendar"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Todo Category</label>
+                <div class="control formCategories">
+                  <input
+                    id="categoriesInput"
+                    class="input"
+                    type="text"
+                    placeholder="Text input"
+                  />
+                  <button id="categoriesBtn" class="button is-info">Add</button>
+                </div>
+                <div class="categoriesWrapper">
+                  <ul class="CategoryList"></ul>
+                </div>
+              </div>
+            </section>
+
+            <footer class="modal-card-foot">
+              <div class="field is-grouped">
+                <div class="control">
+                  <button
+                    class="button"
+                    style="background-color: #ffcf56ff; color: rgb(69, 85, 99)"
+                    id="submit"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
       </main>
     </div>
 

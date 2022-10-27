@@ -45,7 +45,7 @@ header > div {
 }
 
 main {
-  max-width: 50em;
+  max-width: 30em;
   height: 100%;
   width: 100%;
   display: flex;
@@ -56,7 +56,10 @@ main {
 
 .content-wrapper {
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .createTodo {
@@ -67,6 +70,13 @@ main {
   align-items: center;
   padding: 6px;
 }
+
+.filterButtons {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+}
+
 .inputs {
   display: flex;
   height: 100%;
@@ -78,13 +88,10 @@ main {
 
 #todoList {
   height: auto;
-}
-
-#todoList > div {
-  margin: 1em 0;
-  cursor: pointer;
   display: flex;
-  overflow: hidden;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 8px;
 }
 
 .delTodoButton {
@@ -125,6 +132,8 @@ footer {
 /* Card */
 .card {
   display: flex;
+  height: 9rem;
+  cursor: pointer;
 }
 
 .card-content {
@@ -135,9 +144,15 @@ footer {
   pointer-events: none;
 }
 
-.content {
+.CardContent {
   width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 6px;
 }
+
 .cardFooter {
   display: flex;
 }
@@ -147,42 +162,36 @@ footer {
   width: 3em;
 }
 
-i {
-  pointer-events: none;
+#status {
+  width: 3em;
+  background-color: var(--dark-electric-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  padding: 1rem;
+  width: 4rem;
 }
 
-.todoStatus__default {
-  width: 3em;
-  background-color: var(--dark-electric-blue);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.todoStatus__complete {
-  width: 3em;
-  background-color: var(--dark-electric-blue);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.todoStatus__complete:hover,
-.todoStatus__default:hover {
+#status:hover {
   border: solid 1px white;
 }
 
-.fa-check {
-  color: var(--medium-spring-green);
-  font-size: 1.5em;
+.statusSVG_true {
+  pointer-events: none;
+  fill: var(--medium-spring-green);
 }
-.fa-circle {
-  color: var(--brink-pink);
-  font-size: 1.5em;
+.statusSVG_false {
+  pointer-events: none;
+  fill: var(--brink-pink);
 }
 
 /* Modal */
 
 .modal-card-head {
   justify-content: space-between;
+  height: 6rem;
 }
 .modal-card-head > div {
   display: flex;
@@ -200,4 +209,12 @@ i {
 }
 .tag {
   padding: 1rem;
+}
+
+/* Pointer Events fix */
+.content > h3,
+p,
+p > span,
+i {
+  pointer-events: none;
 }

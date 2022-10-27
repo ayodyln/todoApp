@@ -1,156 +1,100 @@
-import { editTodo } from "../../lib/TodoFunctions.js";
-import myTodos from "../../data/todos.js";
+import { addToDOM, renderCatgorieOptions } from "../../index.js"
+import { editTodo } from "../../lib/TodoFunctions.js"
+import {
+  createCategory,
+  deleteCategory,
+  getCategories,
+  getTodo,
+  getTodos,
+} from "../../lib/Todos.js"
 
-// Default Object
-const userInput = {
-  newTitle: "",
-  newDue: "",
-  newCategories: [],
-};
+const main = document.querySelector("main")
+const modal = document.querySelector(".modal")
+const modalBackground = document.querySelector(".modal-background")
 
-const main = document.querySelector("main");
+// Child Elements
+const Title = document.querySelector(".modal-card-title")
+const DueDate = document.querySelector(".dueDate")
 
-export const ModalFunction = (parentNodeID) => {
-  const myTodo = myTodos.find((todo) => todo.id === parentNodeID);
-  const categories = myTodo.category;
+const TitleInput = document.querySelector("#titleInput")
+const DateInput = document.querySelector("#dateInput")
+const CategoriesInput = document.querySelector("#categoriesInput")
+CategoriesInput.value = ""
+const CategoriesBtn = document.querySelector("#categoriesBtn")
+const CategoryList = document.querySelector(".CategoryList")
 
-  //? Fix for the Modal Duplication BUG in DOM.
-  main.childNodes.forEach((node) => {
-    if (node.className === "modal is-active") node.remove();
-  });
+const closeButton = document.querySelector("#closeBtn")
+const submitButton = document.querySelector("#submit")
 
-  let active = "is-active";
+export const ModalFunction = async (todoID) => {
+  //! Displaying Bulma Modal
+  modal.classList.add("is-active")
 
-  main.insertAdjacentHTML(
-    "beforeend",
-    modalMarkup(active, myTodo.title, myTodo.due)
-  );
+  //? Getting Todo Data
+  const input = new Object()
+  const myTodo = await getTodo(todoID)
+  const categories = await getCategories(todoID)
 
-  // --------------------------------------------------
-
-  const categoriesUL = document.querySelector(".CategoryList");
-
-  const categoriesGenerator = (array) => {
-    categoriesUL.textContent = "";
-
-    categoriesUL.childNodes.forEach((node) => {
-      console.log(node);
-    });
-
-    array.forEach((el, i) => {
-      let tagMarkup = `<span class="tag" data-category="${i}">${el} <button id="tagDelete" class="delete" /></span>`;
-      categoriesUL.insertAdjacentHTML("beforeend", tagMarkup);
-    });
-
-    categoriesUL.addEventListener("click", (e) => {
-      if (e.target.className === "delete") {
-        const categoryID = e.target.parentElement.dataset.category * 1;
-        categories.splice(categoryID, 1);
-        categoriesGenerator(categories);
-        e.target.parentElement.remove();
-      }
-    });
-  };
-
-  categoriesGenerator(categories);
-
-  // --------------------------------------------------
-  const newInput = document.querySelector("#categoriesInput");
-
-  const modal = document.querySelector(".modal");
-  main.addEventListener("click", (e) => {
-    if (
-      e.target.className === "modal-background" ||
-      e.target.id === "cancel" ||
-      e.target.id === "closeBtn"
-    )
-      modal?.remove();
-
-    if (e.target.id === "submit") {
-      userInput.newTitle = document.querySelector("#titleInput").value;
-      userInput.newDue = document.querySelector("#dateInput").value;
-
-      editTodo(myTodo, userInput, categories);
-      modal?.remove();
+  //? Updating Modal DOM
+  Title.textContent = myTodo.title
+  DueDate.textContent = myTodo.due
+  TitleInput.placeholder = myTodo.title
+  categories.forEach((category, index) => {
+    let tagMarkup = `<span class="tag" data-category="${index}">${category}<button id="tagDelete" class="delete" /></span>`
+    CategoryList.insertAdjacentHTML("beforeend", tagMarkup)
+  })
+  CategoryList.addEventListener("click", async (event) => {
+    // event.stopImmediatePropagation();
+    if (event.target.id === "tagDelete") {
+      event.stopPropagation()
+      const categoryID = event.target.parentElement.dataset.category * 1
+      CategoryList.childNodes.forEach((node, index) => {
+        if (index === categoryID) node.remove()
+      })
+      const categoryRes = await deleteCategory(categoryID, todoID)
     }
+  })
 
-    if (e.target.id === "categoriesBtn") {
-      if (newInput.value === "") return;
-      categories.push(newInput?.value);
-      categoriesGenerator(categories);
-      newInput.value = "";
-      return;
-    }
-  });
-};
+  //? Events
+  closeButton.addEventListener("click", ModalReset)
+  modalBackground.addEventListener("click", ModalReset)
+  CategoriesBtn.addEventListener("click", async (event) => {
+    event.stopImmediatePropagation()
+    if (CategoriesInput.value === "") return
+    await createCategory(myTodo.id, CategoriesInput.value)
+    await renderCategoryTags(todoID)
+    CategoriesInput.value = ""
+  })
+  submitButton.addEventListener("click", async (event) => {
+    event.stopPropagation()
+    input.title = TitleInput.value
+    input.due = DateInput.value
 
-const modalMarkup = (active, title, due) => `<div class="modal ${active}">
-<div class="modal-background"></div>
-<div class="modal-card">
-  <header class="modal-card-head">
-    <div class="mh">
-      <p class="modal-card-title">${title}</p>
-      <p>${due}</p>
-    </div>
-    <button class="delete" id="closeBtn" aria-label="close"></button>
-  </header>
+    await editTodo(myTodo.id, input)
 
-  <section class="modal-card-body">
-    <div class="field">
-      <label class="label">Todo Title</label>
-      <div class="control">
-        <input id="titleInput" class="input" type="text" placeholder="${title}" />
-      </div>
-    </div>
+    addToDOM(await getTodos())
 
-    <div class="field">
-      <label class="label">Due Date</label>
-      <div class="control has-icons-left has-icons-right">
-        <input
-          class="input"
-          type="date"
-          value="bulma"
-          id="dateInput"
-        />
-        <span class="icon is-small is-left">
-          <i class="fas fa-calendar"></i>
-        </span>
-      </div>
-    </div>
+    ModalReset()
+  })
+}
 
-    <div class="field">
-      <label class="label">Todo Category</label>
-      <div class="control formCategories">
-        <input id="categoriesInput" class="input" type="text" placeholder="Text input" />
-        <button id="categoriesBtn" class="button is-info">Add</button>
-      </div>
-      <div class="categoriesWrapper">
-        <ul class="CategoryList"></ul>
-      </div>
-    </div>
-  </section>
+function ModalReset() {
+  Title.textContent = ""
+  DueDate.textContent = ""
+  CategoryList.textContent = ""
+  TitleInput.value = ""
+  DateInput.value = ""
+  CategoriesInput.value = ""
+  CategoriesInput.textContent = ""
 
-  <footer class="modal-card-foot">
-    <div class="field is-grouped">
-    <div class="control">
-        <button
-          class="button"
-          style="background-color: #ffcf56ff; color: rgb(69, 85, 99)"
-          id="submit"
-        >
-          Submit
-        </button>
-      </div>
-      <div class="control">
-        <button
-          class="button is-ghost"
-          style="color: rgb(69, 85, 99)"
-          id="cancel"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </footer>
-</div>
-</div>`;
+  modal.classList.remove("is-active")
+}
+
+const renderCategoryTags = async (todoID) => {
+  CategoryList.textContent = ""
+  const cat = await getCategories(todoID)
+  cat.forEach((category, index) => {
+    let tagMarkup = `<span class="tag" data-category="${index}">${category}<button id="tagDelete" class="delete" /></span>`
+    CategoryList.insertAdjacentHTML("beforeend", tagMarkup)
+  })
+}
