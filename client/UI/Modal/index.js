@@ -1,4 +1,4 @@
-import { addToDOM, renderCatgorieOptions } from "../../index.js"
+import { addToDOM } from "../../index.js"
 import { editTodo } from "../../lib/TodoFunctions.js"
 import {
   createCategory,
@@ -61,7 +61,7 @@ export const ModalFunction = async (todoID) => {
   CategoriesBtn.addEventListener("click", async (event) => {
     event.stopImmediatePropagation()
     if (CategoriesInput.value === "") return
-    await createCategory(myTodo.id, CategoriesInput.value)
+    await createCategory(myTodo._id, CategoriesInput.value)
     await renderCategoryTags(todoID)
     CategoriesInput.value = ""
   })
@@ -70,7 +70,7 @@ export const ModalFunction = async (todoID) => {
     input.title = TitleInput.value
     input.due = DateInput.value
 
-    await editTodo(myTodo.id, input)
+    await editTodo(myTodo._id, input)
 
     addToDOM(await getTodos())
 

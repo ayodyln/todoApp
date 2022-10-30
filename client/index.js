@@ -22,16 +22,15 @@ const resetButton = document.querySelector("#RESET")
 const clearCompletedBtn = document.querySelector("#CLEAR")
 const categoriesSelector = document.querySelector("#categorySelect")
 
-export const addToDOM = async (array, filterCategory) => {
+export const addToDOM = async (array) => {
   // Clear Todo' DOM Section
   todosSection.textContent = ""
 
   // Looping through Todo's array
   // Creating markup and inserting into document.
   array.forEach((todo) => {
-    let markup = `<div data-todoid="${
-      todo.id
-    }" id="card" class="card todoItem" >
+    console.log(todo._id)
+    let markup = `<div data-id="${todo._id}" id="card" class="card todoItem" >
       <div class="card-content">
         <div class="CardContent">
           <div>
@@ -64,22 +63,23 @@ export const addToDOM = async (array, filterCategory) => {
 
     //! Delete Button
     if (event.target.id === "delete") {
-      const parentNodeID = event.target.offsetParent.dataset.todoid
+      const parentNodeID = event.target.offsetParent.dataset.id
       event.stopPropagation()
-      deleteTodo(parentNodeID, event.target)
+      console.log("fire")
+      await deleteTodo(parentNodeID, event.target)
       renderCatgorieOptions(await getTodos())
     }
 
     // //! Status Button
     if (event.target.id === "status") {
-      const parentNodeID = event.target.offsetParent.dataset.todoid
+      const parentNodeID = event.target.offsetParent.dataset.id
       event.stopPropagation()
       editStatus(parentNodeID, event.target)
     }
 
     //! Parent Card -> Modal
     if (event.target.id === "card") {
-      const parentNodeID = event.target.dataset.todoid * 1
+      const parentNodeID = event.target.dataset.id
       event.stopPropagation()
       ModalFunction(parentNodeID)
     }
@@ -96,7 +96,8 @@ export const addToDOM = async (array, filterCategory) => {
     dateInput.value = ""
   })
 
-  renderCatgorieOptions(array)
+  // TODO: DEBUG
+  // renderCatgorieOptions(array)
 }
 
 //? Render To Do's on page Load
@@ -143,13 +144,10 @@ export function renderCatgorieOptions(array) {
   })
 }
 categoriesSelector.addEventListener("change", async (e) => {
-  const optionValue = e.target.value
-  console.log(optionValue)
-
-  const todos = await getTodoByCategory(optionValue)
-  console.log(todos)
-
-  if (optionValue === "All Categories") {
+  if (e.target.value === "All Categories") {
     addToDOM(await getTodos())
-  } else addToDOM(todos)
+    return
+  }
+
+  addToDOM(await getTodoByCategory(e.target.value))
 })

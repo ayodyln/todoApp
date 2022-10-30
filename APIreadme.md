@@ -23,8 +23,6 @@ node server.js
 
 ### [Todos](#get-todos---todos) | [Categories](#get-categories---categoriestodoid)
 
-<br/>
-
 ### **GET Todos** - /todos
 
 Fetch all current Todo's in the database.
