@@ -123,8 +123,8 @@ resetButton.addEventListener("click", async () => {
 clearCompletedBtn.addEventListener("click", async () => {
   try {
     const res = await fetch("/completeTodos")
-    const datum = await res.json()
-    addToDOM(datum)
+    const data = await res.json()
+    addToDOM(data)
   } catch (error) {
     console.error(error)
   }

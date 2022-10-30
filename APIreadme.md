@@ -13,6 +13,7 @@ node server.js
 - JavaScript
 - NodeJS
 - ExpressJS
+- MongoDB/Mongoose
 - Bulma (CSS)
 
 <br/>
@@ -23,14 +24,21 @@ node server.js
 
 ### [Todos](#get-todos---todos) | [Categories](#get-categories---categoriestodoid)
 
+<br/>
+
 ### **GET Todos** - /todos
 
-Fetch all current Todo's in the database.
+Fetch all current Todo's in the Database
 
 ```javascript
-app.get("/todos", (req, res) => {
-  res.send(myTodos)
-})
+export const getTodos = async () => {
+  try {
+    const res = await fetch("/todos")
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
@@ -40,24 +48,33 @@ app.get("/todos", (req, res) => {
 Fetch single Todo by ID in the database.
 
 ```javascript
-app.get("/todo/:todoID", (req, res) => {
-  const id = req.params.todoID
-  const todo = myTodos.find((todo) => todo.id === id * 1)
-  res.send(todo)
-})
+// todoID: String
+export const getTodo = async (todoID) => {
+  try {
+    const res = await fetch(`/todo/${todoID}`)
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
 
 ### **GET CompleteTodos** - /completeTodos
 
-Fetch and update the database based on what is completed. Response is a new array of _uncompleted_ todo's.
+Fetch and update the database based on what is completed. Response is a new array of remaining _uncompleted_ todo's.
 
 ```javascript
-app.get("/completeTodos", (req, res) => {
-  myTodos = myTodos.filter((todo) => !todo.status)
-  res.send(myTodos)
-})
+try {
+  const res = await fetch("/completeTodos")
+  const data = await res.json()
+
+  // DOM update function.
+  addToDOM(data)
+} catch (error) {
+  console.error(error)
+}
 ```
 
 <br/>
@@ -67,25 +84,14 @@ app.get("/completeTodos", (req, res) => {
 Fetch and update the database to the original state.
 
 ```javascript
-app.get("/resetTodo", (req, res) => {
-  myTodos = [
-    {
-      id: 0,
-      title: "Todo Example #1",
-      status: true,
-      category: ["General", "Latest"],
-      due: "2022-10-2",
-    },
-    {
-      id: 1,
-      title: "Todo Example #2",
-      status: false,
-      category: ["Example"],
-      due: "2022-10-3",
-    },
-  ]
-  res.send(myTodos)
-})
+try {
+  const res = await fetch("/resetTodo")
+
+  // DOM update function.
+  addToDOM(await res.json())
+} catch (error) {
+  console.error(error)
+}
 ```
 
 <br/>
@@ -95,10 +101,21 @@ app.get("/resetTodo", (req, res) => {
 Create a todo and append to the database, with a response of the new todo array.
 
 ```javascript
-app.post("/todos", (req, res) => {
-  myTodos.push(req.body)
-  res.send(myTodos)
-})
+// newTodo is a Object containing a Title and a Due Date for a todo.
+export const newTodo = async (newTodo) => {
+  try {
+    const res = await fetch("/todos", {
+      method: "POST",
+      body: JSON.stringify(newTodo),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
@@ -108,21 +125,20 @@ app.post("/todos", (req, res) => {
 Update Todo Title and Due Date by a todoID.
 
 ```javascript
-app.put("/todos", (req, res) => {
-  const todoID = req.body.todoID
-  const input = req.body.input
-
-  const todo = myTodos.find((todo) => todo.id === todoID)
-
-  if (input.title !== "" || input.due !== "") {
-    todo.due = input.due
-    todo.title = input.title
-    res.send(todo)
-    return
+export const updateTodo = async (todoID, input) => {
+  try {
+    const res = await fetch("/todos", {
+      method: "PUT",
+      body: JSON.stringify({ todoID, input }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return await res.json()
+  } catch (error) {
+    console.error(error)
   }
-
-  res.send(todo)
-})
+}
 ```
 
 <br/>
@@ -132,12 +148,20 @@ app.put("/todos", (req, res) => {
 Update a given Todo's status (completed or uncompleted).
 
 ```javascript
-app.put("/todoStatus", (req, res) => {
-  const id = req.body.todoID
-  const todo = myTodos.find((todo) => todo.id === id)
-  todo.status = !todo.status
-  res.send(todo)
-})
+export const updateTodoStatus = async (todoID) => {
+  try {
+    const res = await fetch(`/todoStatus`, {
+      method: "PUT",
+      body: JSON.stringify({ todoID }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
@@ -147,14 +171,21 @@ app.put("/todoStatus", (req, res) => {
 Delete a todo by ID.
 
 ```javascript
-app.delete("/todos", (req, res) => {
-  const index = req.body.todoID
-  if (myTodos.length === 1) {
-    myTodos.length = 0
-  } else myTodos.splice(index, 1)
+export const delTodo = async (todoID) => {
+  try {
+    const res = await fetch(`/todos`, {
+      method: "DELETE",
+      body: JSON.stringify({ todoID }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
 
-  res.send(myTodos)
-})
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br>
@@ -164,11 +195,15 @@ app.delete("/todos", (req, res) => {
 Get a given Todo's categories array.
 
 ```javascript
-app.get("/Categories/:todoID", (req, res) => {
-  const id = req.params.todoID * 1
-  const todo = myTodos.find((todo) => todo.id === id)
-  res.send(todo.category)
-})
+export const getCategories = async (id) => {
+  try {
+    const res = await fetch(`/Categories/${id}`)
+    const datum = await res.json()
+    return datum
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
@@ -178,14 +213,14 @@ app.get("/Categories/:todoID", (req, res) => {
 Get an array of todos filtered by a category.
 
 ```javascript
-app.get("/todoByCategory/:Category", (req, res) => {
-  const category = req.params.Category
-  const filteredCategories = myTodos.filter((todo) =>
-    todo.category.includes(category)
-  )
-
-  res.send(filteredCategories)
-})
+export const getTodoByCategory = async (category) => {
+  try {
+    const res = await fetch(`/todoByCategory/${category}`)
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
@@ -195,13 +230,20 @@ app.get("/todoByCategory/:Category", (req, res) => {
 Create a new category for a todo.
 
 ```javascript
-app.post("/Categories", (req, res) => {
-  const id = req.body.todoID
-  const categories = req.body.category
-  const todo = myTodos.find((todo) => todo.id === id)
-  todo.category.push(categories)
-  res.send(todo.category)
-})
+export const createCategory = async (todoID, category) => {
+  try {
+    const res = await fetch("/Categories", {
+      method: "POST",
+      body: JSON.stringify({ todoID, category }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
@@ -211,21 +253,20 @@ app.post("/Categories", (req, res) => {
 Update a Todo's category list.
 
 ```javascript
-app.put("/Categories", (req, res) => {
-  const todoID = req.body.todoID
-  const oldCategory = req.body.oldCategory
-  const category = req.body.category
-
-  const todo = myTodos.find((todo) => todo.id === todoID)
-  todo.category.forEach((cat, i) => {
-    if (cat === oldCategory) {
-      todo.category.splice(i, 1)
-      todo.category.push(category)
-    }
-  })
-
-  res.send(todo)
-})
+export const updateCategory = async (todoID, oldCategory, category) => {
+  try {
+    const res = await fetch("/Categories", {
+      method: "PUT",
+      body: JSON.stringify({ todoID, oldCategory, category }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
@@ -235,18 +276,20 @@ app.put("/Categories", (req, res) => {
 Delete Todo category(s).
 
 ```javascript
-app.delete("/Categories", (req, res) => {
-  const todoID = req.body.todoID
-  const categoryIndex = req.body.categoryID
-
-  const todo = myTodos.find((todo) => todo.id === todoID)
-  todo.category.forEach((cat, i) => {
-    if (i === categoryIndex) {
-      todo.category.splice(i, 1)
-    }
-  })
-  res.send(todo.category)
-})
+export const deleteCategory = async (categoryID, todoID) => {
+  try {
+    const res = await fetch("/Categories", {
+      method: "DELETE",
+      body: JSON.stringify({ categoryID, todoID }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return await res.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
 ```
 
 <br/>
