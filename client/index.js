@@ -29,7 +29,6 @@ export const addToDOM = async (array) => {
   // Looping through Todo's array
   // Creating markup and inserting into document.
   array.forEach((todo) => {
-    console.log(todo._id)
     let markup = `<div data-id="${todo._id}" id="card" class="card todoItem" >
       <div class="card-content">
         <div class="CardContent">
